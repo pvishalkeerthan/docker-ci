@@ -1,0 +1,29 @@
+name:user-project
+on:
+  push:
+    branches:[main]
+  pull_request:
+    branches:[main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name : Checkout the repo
+        uses: actions/checkout@v4
+      - name:Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version:24
+      - name:Install dependencies
+        run: npm install
+      - name: Set up Docker compose file-development
+        run: docker-compose up -d
+      - name: Prisma migrate
+        run: npx prisma migrate deploy
+      - name:Run tests
+        run: npm run test
+      -name: docker cleanup
+        run: docker-compose down
+      -name: Build docker image
+        run: docker build -t user-project .
