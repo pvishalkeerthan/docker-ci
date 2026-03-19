@@ -18,12 +18,14 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Set up Docker compose file-development
-        run: docker-compose up -d
+        run: docker compose up -d --build
+      - name: Sleep
+        run: sleep 10
       - name: Prisma migrate
         run: npx prisma migrate deploy
       - name: Run tests
         run: npm run test
       - name: docker cleanup
-        run: docker-compose down
+        run: docker compose down
       - name: Build docker image
         run: docker build -t user-project .
