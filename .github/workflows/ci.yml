@@ -21,11 +21,14 @@ jobs:
         run: docker compose up -d --build
       - name: Sleep
         run: sleep 10
+      - name: prisma generate
+        run: npx prisma generate
       - name: Prisma migrate
         run: npx prisma migrate deploy
       - name: Run tests
         run: npm run test
       - name: docker cleanup
+        if: always()
         run: docker compose down
       - name: Build docker image
         run: docker build -t user-project .
